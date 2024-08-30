@@ -67,7 +67,7 @@ def send_to_openai(files):
     code = '\n'.join(files.values())
 
     # Split the code into chunks that are each within the token limit
-    chunks = textwrap.wrap(code, TOKEN_LIMIT)
+    chunks = textwrap.wrap(code, 2000)
 
     reviews = []
     for chunk in chunks:
@@ -114,7 +114,7 @@ def main():
     
     # Instantiate the Github object using the Github token
     # and get the pull request object
-    pr = Github(os.getenv('GITHUB_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
+    pr = Github(os.getenv('GIT_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
 
     # Get the changed files in the pull request
     files = get_changed_files(pr)
