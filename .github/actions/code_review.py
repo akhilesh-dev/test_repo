@@ -1,12 +1,20 @@
 import os
-from openai import OpenAI
+import openai
 from github import Github
 import git
 import json
 import textwrap
+from openai import OpenAI
 
 # Load OpenAI API key from environment
 openai.api_key = os.getenv('OPENAI_API_KEY')
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("No API key found in environment variables")
+
+client = OpenAI(api_key=openai_api_key)
+
+
 
 # Set the maximum token limit for GPT-4
 TOKEN_LIMIT = 4000
@@ -67,12 +75,12 @@ def send_to_openai(files):
     code = '\n'.join(files.values())
 
     # Split the code into chunks that are each within the token limit
-    chunks = textwrap.wrap(code, 2000)
+    chunks = textwrap.wrap(code, TOKEN_LIMIT)
 
     reviews = []
     for chunk in chunks:
         # Send a message to OpenAI with each chunk of the code for review
-        message = openai.ChatCompletion.create(
+        message = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {
@@ -83,7 +91,7 @@ def send_to_openai(files):
         )
 
         # Add the assistant's reply to the list of reviews
-        reviews.append(message['choices'][0]['message']['content'])
+        reviews.append(message.choices[0].message.content)
 
     # Join all the reviews into a single string
     review = "\n".join(reviews)
@@ -109,12 +117,14 @@ def main():
     3. Posting the review as a comment on the PR
     """
     # Get the pull request event JSON
+    print(os.getenv('GITHUB_EVENT_PATH'))
     with open(os.getenv('GITHUB_EVENT_PATH')) as json_file:
         event = json.load(json_file)
+    print(event)
     
     # Instantiate the Github object using the Github token
     # and get the pull request object
-    pr = Github(os.getenv('GIT_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
+    pr = Github(os.getenv('GITHUB_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
 
     # Get the changed files in the pull request
     files = get_changed_files(pr)
