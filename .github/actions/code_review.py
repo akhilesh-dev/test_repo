@@ -1,5 +1,5 @@
 import os
-import openai
+from openai import OpenAI
 from github import Github
 import git
 import json
