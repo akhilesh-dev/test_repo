@@ -131,14 +131,17 @@ def main():
     pr = Github(os.getenv('GITHUB_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
     print("PR: -> ", pr)
     print("Getting changed files...")
-    # Get the changed files in the pull request
+    # Get the changed files in the pull request    
     files = get_changed_files(pr)
+    print(files)
     print("Sending changes to OpenAI...")
     # Send the files to OpenAI for review
     review = send_to_openai(files)
+    print(review)
     print("Printing comment...")
     # Post the review as a comment on the pull request
     post_comment(pr, review)
+    print("Comment posted!")
 
 if __name__ == "__main__":
     main()  # Execute the main function
