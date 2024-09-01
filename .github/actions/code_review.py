@@ -56,6 +56,7 @@ def get_changed_files(pr):
     files = {}
     for file_path in diffs:
         try:
+            print("File path: ", file_path)
             # Fetch each file's content and store it in the files dictionary
             files[file_path] = get_file_content('./repo/' + file_path)
         except Exception as e:
