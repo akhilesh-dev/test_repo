@@ -4,8 +4,8 @@ on:
   pull_request:
 
 jobs:
-  review:
-    runs-on: ubuntu-latest
+  review:    
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
