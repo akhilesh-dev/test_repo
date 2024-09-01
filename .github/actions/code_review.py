@@ -127,13 +127,13 @@ def main():
     #print("GIT_TOKEN ->> ", os.getenv('GITHUB_TOKEN'))
     pr = Github(os.getenv('GITHUB_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
     print("PR: -> ", pr)
-
+    print("Getting changed files...")
     # Get the changed files in the pull request
     files = get_changed_files(pr)
-
+    print("Sending changes to OpenAI...")
     # Send the files to OpenAI for review
     review = send_to_openai(files)
-
+    print("Printing comment...")
     # Post the review as a comment on the pull request
     post_comment(pr, review)
 
