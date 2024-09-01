@@ -117,13 +117,14 @@ def main():
     3. Posting the review as a comment on the PR
     """
     # Get the pull request event JSON
-    #print(os.getenv('GITHUB_EVENT_PATH'))
+    print("GITHUB_EVENT_PATH ->> ", os.getenv('GITHUB_EVENT_PATH'))
     with open(os.getenv('GITHUB_EVENT_PATH')) as json_file:
         event = json.load(json_file)
     #print(event)
     
     # Instantiate the Github object using the Github token
     # and get the pull request object
+    print("GIT_TOKEN ->> ", os.getenv('GIT_TOKEN'))
     pr = Github(os.getenv('GIT_TOKEN')).get_repo(event['repository']['full_name']).get_pull(event['number'])
 
     # Get the changed files in the pull request
