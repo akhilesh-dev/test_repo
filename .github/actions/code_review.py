@@ -43,8 +43,10 @@ def get_changed_files(pr):
         dict: A dictionary containing the file paths as keys and their content as values.
     """
     # Clone the repository and checkout the PR branch
+    print("repo:->", pr.base.repo.clone_url)
+    print("repo:->", pr.head.ref)
     repo = git.Repo.clone_from(pr.base.repo.clone_url, to_path='./repo', branch=pr.head.ref)
-
+    print("repo:->", repo)
     # Get the difference between the PR branch and the base branch
     base_ref = f"origin/{pr.base.ref}"
     head_ref = f"origin/{pr.head.ref}"
