@@ -1,5 +1,4 @@
 import os
-import openai
 from github import Github
 import git
 import json
@@ -7,14 +6,11 @@ import textwrap
 from openai import OpenAI
 
 # Load OpenAI API key from environment
-openai.api_key = os.getenv('OPENAI_API_KEY')
 openai_api_key = os.getenv("OPENAI_API_KEY")
 if not openai_api_key:
     raise ValueError("No API key found in environment variables")
 
 client = OpenAI(api_key=openai_api_key)
-
-
 
 # Set the maximum token limit for GPT-4
 TOKEN_LIMIT = 4000
@@ -43,8 +39,9 @@ def get_changed_files(pr):
         dict: A dictionary containing the file paths as keys and their content as values.
     """
     # Clone the repository and checkout the PR branch
-    print("repo:->", pr.base.repo.clone_url)
-    print("repo:->", pr.head.ref)
+    print("repo url:->", pr.base.repo.clone_url)
+    print("pr base repo:->", pr.base.ref)
+    print("pr repo:->", pr.head.ref)
     repo = git.Repo.clone_from(pr.base.repo.clone_url, to_path='./repo', branch=pr.head.ref)
     print("repo:->", repo)
     # Get the difference between the PR branch and the base branch
@@ -120,7 +117,7 @@ def main():
     3. Posting the review as a comment on the PR
     """
     # Get the pull request event JSON
-    print("GITHUB_EVENT_PATH ->> ", os.getenv('GITHUB_EVENT_PATH'))
+    #print("GITHUB_EVENT_PATH ->> ", os.getenv('GITHUB_EVENT_PATH'))
     with open(os.getenv('GITHUB_EVENT_PATH')) as json_file:
         event = json.load(json_file)
     #print(event)
