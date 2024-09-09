@@ -18,10 +18,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install openai PyGithub GitPython
+          pip install streamlit openai PyGithub GitPython
 
       - name: Run review
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        run: python .github/actions/code_review.py
+        run: streamlit run .github/actions/code_review.py
