@@ -30,3 +30,10 @@ if prompt := st.chat_input():
 
 def sum(n1, n2):
     return n1
+def mul(n1, n2):
+    return n1
+    
+def div(n1, n2):
+    return n1/n2
+
+#st.write("code change")
